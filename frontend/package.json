@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "generate:draft": "node ../scripts/ai-generate-draft.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.49.0",

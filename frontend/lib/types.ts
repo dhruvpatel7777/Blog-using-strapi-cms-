@@ -31,6 +31,7 @@ export interface Author {
 
 export interface Article {
   id: number | string;
+  documentId?: string;
   title: string;
   slug: string;
   excerpt: string;
@@ -38,7 +39,10 @@ export interface Article {
   coverImage: string;
   readingTime: string;
   featured?: boolean;
-  publishedAt: string;
+  publishedAt: string | null;
+  status?: 'draft' | 'published';
+  createdAt?: string;
+  updatedAt?: string;
   category: Category;
   author: Author;
   tags: string[];

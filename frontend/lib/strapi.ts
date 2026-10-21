@@ -126,6 +126,22 @@ export async function getArticles(options?: {
     articles = [...mockArticles];
   }
 
+  // Merge any runtime published articles if on server
+  if (typeof window === 'undefined') {
+    try {
+      const { getServerPublishedArticles } = require('./runtime-store');
+      const serverPublished: Article[] = getServerPublishedArticles();
+      if (serverPublished && serverPublished.length > 0) {
+        // Prepend newer published articles without duplicate slugs
+        const existingSlugs = new Set(articles.map((a) => a.slug));
+        const newOnes = serverPublished.filter((sp) => !existingSlugs.has(sp.slug));
+        articles = [...newOnes, ...articles];
+      }
+    } catch (e) {
+      // ignore
+    }
+  }
+
   // Client / fallback filtering
   if (categorySlug) {
     articles = articles.filter(
@@ -170,7 +186,25 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
     return art;
   }
   const found = mockArticles.find((a) => a.slug.toLowerCase() === slug.toLowerCase());
-  return found || null;
+  if (found) return found;
+
+  // Check runtime server store (both published and drafts for preview)
+  if (typeof window === 'undefined') {
+    try {
+      const { getServerPublishedArticles, getServerDrafts } = require('./runtime-store');
+      const published = getServerPublishedArticles();
+      const matchPub = published.find((a: Article) => a.slug.toLowerCase() === slug.toLowerCase());
+      if (matchPub) return matchPub;
+
+      const drafts = getServerDrafts();
+      const matchDraft = drafts.find((a: Article) => a.slug.toLowerCase() === slug.toLowerCase());
+      if (matchDraft) return matchDraft;
+    } catch (e) {
+      // ignore
+    }
+  }
+
+  return null;
 }
 
 /**

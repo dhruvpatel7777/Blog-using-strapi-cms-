@@ -44,11 +44,13 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   const relatedArticles = await getRelatedArticles(article.slug, article.category?.slug);
 
-  const formattedDate = new Date(article.publishedAt).toLocaleDateString('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  });
+  const formattedDate = article.publishedAt
+    ? new Date(article.publishedAt).toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+      })
+    : 'Draft Preview';
 
   return (
     <article className="relative min-h-screen py-10 lg:py-16">

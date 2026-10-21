@@ -10,12 +10,14 @@ interface ArticleCardProps {
 }
 
 export default function ArticleCard({ article, variant = 'standard' }: ArticleCardProps) {
-  const formattedDate = new Date(article.publishedAt).toLocaleDateString('en-IN', {
-  timeZone: 'Asia/Kolkata',
-  month: 'short',
-  day: 'numeric',
-  year: 'numeric',
-});
+  const formattedDate = article.publishedAt
+    ? new Date(article.publishedAt).toLocaleDateString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      })
+    : 'Draft';
 
   if (variant === 'featured') {
     return (

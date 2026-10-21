@@ -11,10 +11,13 @@ export default {
         .findOne({ where: { type: 'public' } });
 
       if (publicRole) {
-        const apis = ['article', 'category', 'author'];
-        const actions = ['find', 'findOne'];
+        const apiActions: Record<string, string[]> = {
+          article: ['find', 'findOne', 'create', 'update', 'delete'],
+          category: ['find', 'findOne'],
+          author: ['find', 'findOne'],
+        };
 
-        for (const api of apis) {
+        for (const [api, actions] of Object.entries(apiActions)) {
           for (const action of actions) {
             const actionId = `api::${api}.${api}.${action}`;
             const existingPermission = await strapi
@@ -33,6 +36,11 @@ export default {
                   role: publicRole.id,
                   enabled: true,
                 },
+              });
+            } else if (!existingPermission.enabled) {
+              await strapi.query('plugin::users-permissions.permission').update({
+                where: { id: existingPermission.id },
+                data: { enabled: true },
               });
             }
           }

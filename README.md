@@ -15,9 +15,43 @@ The application is structured into a decoupled frontend and headless Strapi back
 | `/blog/[slug]` | **Article Detail** | Reading scroll progress bar, cover hero image, rich typography (code blocks, blockquotes, callouts), sticky sidebar with key highlights, social share (Twitter/X, LinkedIn, Copy URL with toast), and interactive discussion comments. |
 | `/category/[slug]` | **Category Archive** | Dedicated topic landing page with custom theme accents, topic description, article counters, cross-category chips, and filtered posts. |
 | `/author/[slug]` | **Author Profile** | Verified contributor card with avatar, role, comprehensive bio, publication statistics (articles, followers, reads), social media links, and author articles grid. |
+| `/studio` | **Editorial AI Studio** | Autonomous AI article generator with multi-provider engine (Lumina Neural, Gemini, OpenAI), 1-click trending generation, live preview, in-place markdown editor, and strict human review guardrail before publishing. |
 | `/search` | **Search Page** | Real-time interactive keyword search with URL param sync (`?q=...`), category filters, tag chips, suggested queries, and instant result count. |
 | `/about` | **About Page** | Brand vision, publication statistics banner, core engineering values, technology stack breakdown, and editorial team showcase. |
 | `/contact` | **Contact Page** | Interactive editorial contact form with inquiry categories, direct channel cards, SLA response guarantees, and FAQ section. |
+
+---
+
+## 🤖 AI Blog Automation & Human Review Workflow
+
+The system is equipped with an automated AI blogging engine featuring an **enforced editorial review guardrail**:
+
+> 🛡️ **Zero Auto-Publish Guardrail**: Every AI-generated blog post is created strictly as a **Draft** (`publishedAt: null`). Articles are **never** released to the live public feed until you manually review, edit, and click **"Approve & Publish"**.
+
+### How It Works:
+1. **AI Automated Generation**:
+   - The AI formulates the article thesis, generates structured sections with markdown headings (`##`, `###`), creates realistic syntax-highlighted code blocks, produces key takeaways/quotes, generates meta tags, calculates reading time, and curates high-resolution thematic photography.
+   - **Supported Engines**:
+     - **Lumina Neural Engine**: Built-in, zero-setup, zero-cost generator that works out of the box with 0 configuration.
+     - **Google Gemini API**: Uses `GEMINI_API_KEY` (Gemini 1.5 Flash / 2.0).
+     - **OpenAI API**: Uses `OPENAI_API_KEY` (GPT-4o Mini / 4o).
+2. **Review & Approval Station (`/studio`)**:
+   - Access via the **AI Studio** link in the top navigation.
+   - **Live Preview Tab**: Inspect the article exactly as it will render live on the blog (hero image, author byline, reading time, code blocks, sidebar).
+   - **In-Place Editor Tab**: Make any changes to the Title, Excerpt, Content (markdown editor with word counter), Category, Assigned Author, Cover Image, and Tags.
+3. **Manual Publication**:
+   - Click **"Approve & Publish to Live Blog"**.
+   - Sets `publishedAt = new Date().toISOString()`, synchronizes with Strapi CMS, and immediately releases the post to the homepage, blog archive, and category pages.
+
+### Running Automation via CLI / Cron:
+Generate a complete draft directly from your terminal:
+```bash
+# Automated trending draft (saves as Draft for review)
+node scripts/ai-generate-draft.mjs
+
+# Custom topic generation
+node scripts/ai-generate-draft.mjs --topic "Building Scalable Edge Microservices" --category "cloud-infrastructure"
+```
 
 ---
 

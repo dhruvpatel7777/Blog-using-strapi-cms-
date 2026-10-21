@@ -12,6 +12,7 @@ export default function Navbar() {
   const navLinks = [
     { name: 'Home', href: '/' },
     { name: 'Blog', href: '/blog' },
+    { name: 'AI Studio', href: '/studio' },
     { name: 'Search', href: '/search' },
     { name: 'About', href: '/about' },
     { name: 'Contact', href: '/contact' },
@@ -73,6 +74,14 @@ export default function Navbar() {
             <kbd className="hidden xl:inline-block px-1.5 py-0.5 text-[10px] font-mono bg-white/[0.08] rounded border border-white/[0.1] text-zinc-300">
               /
             </kbd>
+          </Link>
+
+          <Link
+            href="/studio"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gradient-to-r from-indigo-600/30 via-purple-600/20 to-cyan-500/20 border border-indigo-500/40 hover:border-indigo-400 text-indigo-300 hover:text-white text-xs font-semibold shadow-md shadow-indigo-600/20 transition-all duration-200"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
+            <span>AI Studio</span>
           </Link>
 
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-medium">
